@@ -1,16 +1,11 @@
 import fs from 'fs';
-import { matchResult } from "./matchResult";
 
-//tuple
-type MatchData = [ Date, string, string, number, number, matchResult, string]
-
-
-export abstract class CsvFileReader<TypeOfData> {
-  data: TypeOfData[] = [];
+export abstract class CsvFileReader<T> {
+  data: T[] = [];
   
   constructor(public filename: string) {}
 
-  abstract mapRow(row: string[]): TypeOfData;
+  abstract mapRow(row: string[]): T;
 
   read(): void {
     this.data = fs

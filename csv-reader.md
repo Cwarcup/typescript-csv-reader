@@ -366,5 +366,9 @@ holdString.data = 'Hello there';
 ```
 **Treat generics like function arguments**.
 
+- "T" is often used to reference a generic type.
+
+## Applying Type to a generic
+
 
 
