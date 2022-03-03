@@ -368,7 +368,15 @@ holdString.data = 'Hello there';
 
 - "T" is often used to reference a generic type.
 
-## Applying Type to a generic
-
-
-
+## Alternate Refactor
+- still going to create a class MatchReader.
+  - MatchReader will have its own class this time.
+  - will have:
+    - reader: DataReader;
+    - load(): void;
+- Will also have an **interface DataReader**.
+  - has methods:
+    - read(): void
+    - data: string[][];
+- Will eventually have several types of 'readers' in our 'CsvFileReader`
+- 
