@@ -379,4 +379,103 @@ holdString.data = 'Hello there';
     - read(): void
     - data: string[][];
 - Will eventually have several types of 'readers' in our 'CsvFileReader`
-- 
+
+See 'alternative refactor' branch.
+
+# Inheritance vs Composition
+
+Inheritance:
+- Had an **abstract class** CsvFileReader, with **abstract method** mapRow().
+- Extended that class and customized the behavior.
+  - created class MatchReader
+```typescript
+//CsvFileReader.ts
+export abstract class CsvFileReader<T> {
+  data: T[] = [];
+  
+  constructor(public filename: string) {}
+
+  abstract mapRow(row: string[]): T;
+
+  read(): void {
+    this.data = fs
+      .readFileSync(this.filename, {
+      encoding: 'utf-8'
+      })
+      .split('\n')
+      .map((row: string): string[] => {
+        return row.split(',');
+      })
+      .map(this.mapRow)
+  }
+}
+
+//MatchReader
+import { CsvFileReader } from "./CsvFileReader";
+import { matchResult } from "./matchResult";
+import { dateStringToDate } from "./utils";
+
+//tuple
+type MatchData = [ Date, string, string, number, number, matchResult, string]
+
+export class MatchReader extends CsvFileReader<MatchData> {
+  mapRow(row: string[]): MatchData {
+    return [
+      dateStringToDate(row[0]),
+      row[1],
+      row[2],
+      parseInt(row[3]),
+      parseInt(row[4]),
+      row[5] as matchResult,
+      row[6]
+    ]
+  }
+}
+```
+
+Composition:
+- had a class "MatchReader" with an **interface** of `constructor(public reader: DataReader) {};`.
+```typescript
+import { dateStringToDate } from './Utils';
+import { MatchResult } from "./MatchResult";
+
+//tuple
+type MatchData = [ Date, string, string, number, number, MatchResult, string]
+
+
+interface DataReader {
+  read(): void;
+  data: string[][];
+};
+
+export class MatchReader {
+  matches: MatchData[] = [];
+
+  constructor(public reader: DataReader) {};
+
+  load(): void {
+    this.reader.read();
+    this.matches = this.reader.data.map(
+      (row: string[]): MatchData => {
+        return [
+          dateStringToDate(row[0]),
+          row[1],
+          row[2],
+          parseInt(row[3]),
+          parseInt(row[4]),
+          row[5] as MatchResult,
+          row[6]
+        ];
+      }
+    )
+  }
+}
+```
+---
+
+Inheritance: characterized by an **'is an'** relationship between two classes.
+Composition: Characterized by an **'has a'** relationship between two classes. 
+
+## More on Inheritance vs Composition
+
+[Video: ](https://www.udemy.com/course/typescript-the-complete-developers-guide/learn/lecture/15066834#overview)
