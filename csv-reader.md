@@ -246,3 +246,125 @@ data: MatchData[] = [];
 
 ## Refactor CsvFileReader to be reusable again
 
+Will work on any csv file
+```typescript
+export class CsvFileReader {
+  data: MatchData[] = [];
+  
+  constructor(public filename: string) {}
+
+  read(): void {
+    this.data = fs
+      .readFileSync(this.filename, {
+      encoding: 'utf-8'
+      })
+      .split('\n')
+      .map((row: string): string[] => {
+        return row.split(',');
+      })
+```
+
+Can create a helper function:
+```typescript
+export class CsvFileReader {
+  data: MatchData[] = [];
+  
+  constructor(public filename: string) {}
+
+  read(): void {
+    this.data = fs
+      .readFileSync(this.filename, {
+      encoding: 'utf-8'
+      })
+      .split('\n')
+      .map((row: string): string[] => {
+        return row.split(',');
+      })
+      .map(this.mapRow)
+  }
+
+  mapRow(row: string[]): MatchData {
+    return [
+      dateStringToDate(row[0]),
+      row[1],
+      row[2],
+      parseInt(row[3]),
+      parseInt(row[4]),
+      row[5] as matchResult,
+      row[6]
+    ];
+  };
+}
+```
+- now we have our specialized Match Data in a separate method. 
+
+## Create an Abstract Method
+- will be creating a separate abstract method to ONLY handle the MatchData. 
+- It will extend from CsvFileReader and use the `mapRow` method to work with the MatchData file.
+
+---
+
+## Generics
+- Like function arguments, but for types in class/function definitions. 
+- Allows us to define the type of a property/argument/return value at a point.
+- Used heavily when making reusable code.
+
+```typescript
+//nothing to do with generics
+const addOne = (a: number): number => {
+  return a + 1;
+};
+
+const addTwo = (a: number): number => {
+  return a + 2;
+};
+
+const addThree = (a: number): number => {
+  return a + 3;
+};
+```
+- this is very repetitive. 
+- would better to have ONE reusable function
+```typescript
+const add = (a: number, b: number): number => {
+  return a + b;
+};
+add(10,1) // 11
+add(10,2) // 12
+add(10,3) //13
+
+// GENERICS not being used in a class:
+class HoldNumber {
+  data: number;
+};
+class HoldString {
+  data: string;
+};
+
+
+const holdNumber = new HoldNumber();
+holdNumber.data = 123;
+
+const holdString = new HoldString();
+holdString.data = 'sdfsd';
+```
+> this is like the EXACT same as above. 
+
+- **GENERICS** being used
+- Imagine `<TypeOfData>` being the same as (a: number, b: number)
+
+```typescript
+class HoldAnything<TypeOfData> {
+  data: TypeOfData;
+};
+
+const holdNumber = new HoldAnything<number>();
+holdNumber.data = 123;
+
+const holdString = new HoldAnything<string>();
+holdString.data = 'Hello there';
+```
+**Treat generics like function arguments**.
+
+
+
