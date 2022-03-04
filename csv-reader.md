@@ -606,3 +606,59 @@ export enum MatchResult {
 
 > Takes all match data, runs an analysis on it, and returns a result. In theory, we could create as many classes as we want with a different analysis. For example, could make an analysis for AverageGoalsAnalysis.
 
+### class ConsoleReport
+
+```typescript
+import { OutputTarget } from '../Summary'
+
+export class ConsoleReport implements OutputTarget {
+  print(report: string): void{
+    console.log(report);
+  }
+}
+```
+
+### Implement BuildAndPrintReport inside of class Summary
+
+```typescript
+export class Summary {
+  constructor(
+    public analyzer: Analyzer,
+    public outputTarget: OutputTarget) {}
+
+    buildAndPrintReport(matches: MatchData[]): void {
+      const output = this.analyzer.run(matches);
+      this.outputTarget.print(output);
+    }
+  }
+```
+
+- class Summary does not have a lot of actual behavior in it. 
+  - I.stead it uses different objects (analyzer and outputTargets) to do the heavy lifting. 
+    - we can also change which objects are used to get different outputs of information.
+
+### Bringing it all together in index.ts
+```typescript
+import { MatchReader } from "./MatchReader";
+import { CsvFileReader } from "./CsvFileReader";
+import { ConsoleReport } from './reportTargets/ConsoleReport'
+import { WinsAnalysis } from "./analyzers/WinsAnalysis";
+import { Summary } from "./Summary";
+
+//create an object that satisfies the 'DataReader' interface.
+// code required to read the csv file.
+const csvFileReader = new CsvFileReader('football.csv');
+
+// take the data from the csv file and parse it into a readable string. Uses method `load()` to parse the csvFileReader string.
+const matchReader = new MatchReader(csvFileReader);
+matchReader.load();
+
+const summary = new Summary(
+  new WinsAnalysis('Man United'),
+  new ConsoleReport(),
+);
+
+summary.buildAndPrintReport(matchReader.matches);
+// fire up nodemon with `npm start`
+// Team Man United won 18 number of games.
+```

@@ -1,14 +1,20 @@
 import { MatchReader } from "./MatchReader";
-import { MatchResult } from "./MatchResult";
 import { CsvFileReader } from "./CsvFileReader";
+import { ConsoleReport } from './reportTargets/ConsoleReport'
+import { WinsAnalysis } from "./analyzers/WinsAnalysis";
+import { Summary } from "./Summary";
 
 //create an object that satisfies the 'DataReader' interface.
+// code required to read the csv file.
 const csvFileReader = new CsvFileReader('football.csv');
 
-//create an instance of MatchReader and pass in something to satisfy the 'DataReader' interface.
+// take the data from the csv file and parse it into a readable string. Uses method `load()` to parse the csvFileReader string.
 const matchReader = new MatchReader(csvFileReader);
 matchReader.load();
 
+const summary = new Summary(
+  new WinsAnalysis('Man United'),
+  new ConsoleReport(),
+);
 
-
-console.log(`Man United won ${manUnitedWins} games!`);
+summary.buildAndPrintReport(matchReader.matches);
