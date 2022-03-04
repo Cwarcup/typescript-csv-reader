@@ -8,7 +8,6 @@ const csvFileReader = new CsvFileReader_1.CsvFileReader('football.csv');
 //create an instance of MatchReader and pass in something to satisfy the 'DataReader' interface.
 const matchReader = new MatchReader_1.MatchReader(csvFileReader);
 matchReader.load();
-// matchRerader.matches
 let manUnitedWins = 0;
 for (let match of matchReader.matches) {
     if (match[1] === 'Man United' && match[5] === MatchResult_1.MatchResult.HomeWin) {

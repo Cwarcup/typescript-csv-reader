@@ -479,3 +479,39 @@ Composition: Characterized by an **'has a'** relationship between two classes.
 ## More on Inheritance vs Composition
 
 [Video: ](https://www.udemy.com/course/typescript-the-complete-developers-guide/learn/lecture/15066834#overview)
+
+```javascript
+const rectangular = (state) => {
+  return {
+    area: () => {
+      return state.heigh * state.width;
+    }
+  }
+};
+
+const openable = (state) => {
+  return {
+    toggleOpen: () => {
+      state.open = !state.open;
+    }
+  }
+}
+
+// to compose these into an object
+
+const buildRectangleWindow = (state) => {
+  // basically taking the methods from rectangular(state), openable(state) and copying them into state
+  return Object.assign(state, rectangular(state), openable(state));
+};
+
+const rectangleWindow = buildRectangleWindow({
+  height: 20,
+  width: 20,
+  open: false
+});
+
+rectangleWindow.open // false
+rectangleWindow.toggleOpen();
+rectangleWindow.open // true
+```
+
