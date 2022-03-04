@@ -3,6 +3,7 @@ import { CsvFileReader } from "./CsvFileReader";
 import { ConsoleReport } from './reportTargets/ConsoleReport'
 import { WinsAnalysis } from "./analyzers/WinsAnalysis";
 import { Summary } from "./Summary";
+import { HtmlReport } from "./reportTargets/HtmlReport"
 
 //create an object that satisfies the 'DataReader' interface.
 // code required to read the csv file.
@@ -14,7 +15,7 @@ matchReader.load();
 
 const summary = new Summary(
   new WinsAnalysis('Man United'),
-  new ConsoleReport(),
+  new HtmlReport(),
 );
 
 summary.buildAndPrintReport(matchReader.matches);

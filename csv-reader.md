@@ -64,7 +64,7 @@ console.log(`Man United won ${manUnitedWins} games`);
 // Man United won 18 games 
 ```
 
-# Improve Code with TypeScript
+## Improve Code with TypeScript
 
 - Make homeWin and awayWin variables
 - extract hardcoded values into a more meaningful variable.
@@ -81,7 +81,7 @@ for (let match of matches) {
 }
 ```
 
-### Using Enums
+## Using Enums
 
 - about [enums](https://www.typescriptlang.org/docs/handbook/enums.html).
 - enum - short for enumeration
@@ -114,7 +114,7 @@ for (let match of matches) {
 Why ise enums?
 - signals to other people that this is a collection of closely related values. 
 
-#### When to use Enums
+### When to use Enums
 
 Accessing:
 ```typescript
@@ -163,7 +163,7 @@ export class CsvFileReader {
 
 ![data ](https://github.com/Cwarcup/notes/blob/93a2de6076c9c21ac45034e3fca929f932429575/root/typescript/images/Section2/data.png)
 
-#### Date String to Date object
+## Date String to Date object
 
 How to create date object
 ```
@@ -382,7 +382,7 @@ holdString.data = 'Hello there';
 
 See 'alternative refactor' branch.
 
-# Inheritance vs Composition
+## Inheritance vs Composition
 
 Inheritance:
 - Had an **abstract class** CsvFileReader, with **abstract method** mapRow().
@@ -476,7 +476,7 @@ export class MatchReader {
 Inheritance: characterized by an **'is an'** relationship between two classes.
 Composition: Characterized by an **'has a'** relationship between two classes. 
 
-## More on Inheritance vs Composition
+### More on Inheritance vs Composition
 
 [Video: ](https://www.udemy.com/course/typescript-the-complete-developers-guide/learn/lecture/15066834#overview)
 
@@ -546,7 +546,7 @@ rectangleWindow.open // true
   - best to create its own file with this. 
   - create `MatchData.ts` file in src.
 
-#### Adding Summary Class
+## Adding Summary Class
 - Create `Summary.ts` class
   - will need to create two **interfaces** within here:
     - **Analyzer**
@@ -578,7 +578,7 @@ export class Summary {
 new Summary(new WinsAnalysis, new ConsoleReport);
 ```
 
-#### class WinsAnalysis
+## class WinsAnalysis
 
 - will provide a team, and tell us how many games the team has won.
 - remember this class must **satisfy** the `Analyzer` **interface**
@@ -606,7 +606,7 @@ export enum MatchResult {
 
 > Takes all match data, runs an analysis on it, and returns a result. In theory, we could create as many classes as we want with a different analysis. For example, could make an analysis for AverageGoalsAnalysis.
 
-### class ConsoleReport
+## class ConsoleReport
 
 ```typescript
 import { OutputTarget } from '../Summary'
@@ -618,7 +618,7 @@ export class ConsoleReport implements OutputTarget {
 }
 ```
 
-### Implement BuildAndPrintReport inside of class Summary
+## Implement BuildAndPrintReport inside of class Summary
 
 ```typescript
 export class Summary {
@@ -637,7 +637,7 @@ export class Summary {
   - I.stead it uses different objects (analyzer and outputTargets) to do the heavy lifting. 
     - we can also change which objects are used to get different outputs of information.
 
-### Bringing it all together in index.ts
+## Bringing it all together in index.ts
 ```typescript
 import { MatchReader } from "./MatchReader";
 import { CsvFileReader } from "./CsvFileReader";
@@ -662,3 +662,10 @@ summary.buildAndPrintReport(matchReader.matches);
 // fire up nodemon with `npm start`
 // Team Man United won 18 number of games.
 ```
+
+## Generate HTML Report
+
+Need to import the OutputTarget interface and use the print method to generate HTML.
+Will also need to use the `fs`  method from the built in Node module. Remember, we used this module in the CsvFileReader to read a file. Now will be using `fs` to [write a file](https://nodejs.org/dist/latest-v16.x/docs/api/fs.html#fswritefilesyncfile-data-options).
+
+

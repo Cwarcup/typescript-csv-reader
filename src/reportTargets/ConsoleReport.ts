@@ -5,3 +5,4 @@ export class ConsoleReport implements OutputTarget {
     console.log(report);
   }
 }
+
