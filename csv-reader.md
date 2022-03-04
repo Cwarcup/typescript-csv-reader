@@ -515,3 +515,65 @@ rectangleWindow.toggleOpen();
 rectangleWindow.open // true
 ```
 
+## Goal
+
+- interface Analyzer
+  - run(matches: MatchData[]): string
+
+- interface OutputTarget
+  - print(report: string): void
+
+- class Summary
+  - analyzer: Analyzer
+  - outputTarget: OutputTarget
+  - buildAndPrintReport(MatchData[])
+
+- class AverageGaolsAnalysis
+  - run(MatchData[]): string
+  
+- class WinsAnalysis
+  -run(MatchData[]): string
+
+- class ConsoleReport
+  - print(report: string): void
+
+- class HtmlReport
+  - print(report: string): void
+
+---
+
+- Have to refer to `MatchData` numerous times. 
+  - best to create its own file with this. 
+  - create `MatchData.ts` file in src.
+
+
+- Create `Summary.ts` class
+  - will need to create two **interfaces** within here:
+    - **Analyzer**
+      - takes in the tuple `MatchData` and returns a string from running the analysis.
+    - **OutputTarget**
+  - create class
+    - will pass in an **instance** to use **analyzer** and **outputTarget**
+    - we need to pass `Summary` the `run` method from either `class AverageGoalsAnalysis` or `class WinsAnalysis`. 
+    - As well as `print` method from `class ConsoleReport` or `class HtmlReport`.
+      - these will be used to assign to the **"Analyzer" or "OutputTarget" property**. 
+```typescript
+import { MatchData } from "./MatchData";
+
+export interface Analyzer {
+  run(matches: MatchData[]): string;
+}
+
+export interface OutputTarget {
+  print(report: string): void;
+}
+
+export class Summary {
+  constructor(
+    public analyzer: Analyzer,
+    public outputTarget: OutputTarget) {}
+}
+
+// will eventually use Summary() like so:
+new Summary(new WinsAnalysis, new ConsoleReport);
+```
