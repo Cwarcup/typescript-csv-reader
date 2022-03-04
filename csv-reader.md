@@ -724,3 +724,35 @@ export class Summary {
 ```
 
 Back in the index.ts add `const summary = Summary.WinsAnalysisWithHtmlReport('Man United');`
+
+---
+
+Can do the same thing with `MatchReader`
+```typescript
+export class MatchReader {
+  static fromCsv(filename: string): MatchReader {
+    return new MatchReader(new CsvFileReader(filename));
+  }
+  ...
+}
+
+// index.ts
+const matchReader = MatchReader.fromCsv('football.csv')
+
+matchReader.load();
+
+const summary = Summary.WinsAnalysisWithHtmlReport('Arsenal');
+
+summary.buildAndPrintReport(matchReader.matches);
+```
+
+# Review of app
+
+- in `matchResult.ts` we created an **enum.**
+  - an **enum** is a set of values that are closely related. 
+  - the only goal it to communicate to other people that these are related. 
+- created a **tuple**.
+  - used this to describe the **type** of the entire row of data.
+  - recall we had Date, strings, numbers, and MatchResult. 
+  - it does NOT convert values for us.
+  - it only describes to ordered types inside of the array.
