@@ -2,8 +2,6 @@ import { dateStringToDate } from './Utils';
 import { MatchResult } from "./matchResult";
 import { MatchData } from './MatchData';
 
-
-
 interface DataReader {
   read(): void;
   data: string[][];

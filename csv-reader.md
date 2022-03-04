@@ -546,7 +546,7 @@ rectangleWindow.open // true
   - best to create its own file with this. 
   - create `MatchData.ts` file in src.
 
-
+#### Adding Summary Class
 - Create `Summary.ts` class
   - will need to create two **interfaces** within here:
     - **Analyzer**
@@ -577,3 +577,32 @@ export class Summary {
 // will eventually use Summary() like so:
 new Summary(new WinsAnalysis, new ConsoleReport);
 ```
+
+#### class WinsAnalysis
+
+- will provide a team, and tell us how many games the team has won.
+- remember this class must **satisfy** the `Analyzer` **interface**
+  - can do this im **importing** the `Analyzer interface` and using **implements keyword** to check out class. 
+```typescript
+import { MatchData } from "../MatchData";
+import {Analyzer} from "../Summary"
+
+export class WinsAnalysis implements Analyzer {
+  constructor(public team: string) {}
+
+  run(matches: MatchData[]): string {
+    // code to run the analysis
+  }
+}
+```
+Remember, `MatchResult` was our enum 
+```
+export enum MatchResult {
+  HomeWin = 'H',
+  AwayWin = 'A',
+  Draw = 'D',
+};
+```
+
+> Takes all match data, runs an analysis on it, and returns a result. In theory, we could create as many classes as we want with a different analysis. For example, could make an analysis for AverageGoalsAnalysis.
+
