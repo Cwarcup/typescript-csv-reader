@@ -669,3 +669,58 @@ Need to import the OutputTarget interface and use the print method to generate H
 Will also need to use the `fs`  method from the built in Node module. Remember, we used this module in the CsvFileReader to read a file. Now will be using `fs` to [write a file](https://nodejs.org/dist/latest-v16.x/docs/api/fs.html#fswritefilesyncfile-data-options).
 
 
+```typescript
+//HtmlReport.ts
+import fs from 'fs';
+import { OutputTarget } from '../Summary';
+
+export class HtmlReport implements OutputTarget {
+  print(report: string): void {
+    const html = `
+      <div>
+        <h1>Analysis Report</h1>
+        <div>${report}</div>
+      </div>
+    `;
+    fs.writeFileSync('report.html',html);
+  }
+}
+ //index.ts
+// change summary to use HtmlReport
+const summary = new Summary(
+  new WinsAnalysis('Man United'),
+  new HtmlReport(),
+);
+```
+> can now save and run this. Will generate a new file called 'report.html' in the root directory, which can then be opened in the browser. 
+
+---
+
+Right now we have to call...
+ `const summary = new Summary()`
+ `summary.buildAndPrintReport`
+to make ANY summary. 
+
+But we can simplify this by using a **static method**. See more [here](https://www.typescriptlang.org/docs/handbook/2/classes.html#static-members)
+- could then call the method without creating an instance of summary.
+
+```typescript
+export class Summary {
+  static WinsAnalysisWithHtmlReport(team: string): Summary {
+    return new Summary(
+      new WinsAnalysis(team),
+      new HtmlReport()
+    );
+  }
+  constructor(
+    public analyzer: Analyzer,
+    public outputTarget: OutputTarget) {}
+
+  buildAndPrintReport(matches: MatchData[]): void {
+    const output = this.analyzer.run(matches);
+    this.outputTarget.print(output);
+  }
+}
+```
+
+Back in the index.ts add `const summary = Summary.WinsAnalysisWithHtmlReport('Man United');`
